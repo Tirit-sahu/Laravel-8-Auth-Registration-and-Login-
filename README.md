@@ -1,61 +1,62 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+Step 1: Install a new Laravel app
+composer create-project laravel/laravel projectapp --prefer-dist
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+The command above only install Laravel, however, if you want to install Jetstream together then either
 
-## About Laravel
+Laravel new projectapp --jet
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+or
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+composer require laravel/jetstream
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+we are going with the first of only installing Laravel, I want to explain other things in the process.
 
-## Learning Laravel
+I highlighted some changes noticed in the installation of Laravel 8 from the previous Laravel versions, you can check them out in my previous post Laravel 8 CRUD.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+Step 2: Database Setup
+Open the .env file on your IDE or text editor
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+.env file
+Change the DB_DATABASE to the name of your database and if you have set a Username and password for your phpmyadmin, specify it, otherwise, leave the username as root and password blank.
+Before we migrate, let’s catch one bug before it throws an error, go to App/Providers/AppServiceProvider.php
+and add
 
-## Laravel Sponsors
+Schema::defaultstringLength(191);
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+to the boot function, also add
 
-### Premium Partners
+use Illuminate\Support\Facades\Schema;
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[OP.GG](https://op.gg)**
+to the top
+AppServiceProvider file
 
-## Contributing
+Step 3: Migration
+php artisan migrate
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+migration file
 
-## Code of Conduct
+Step 4: install Jetstream
+composer require laravel/jetstream
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Installing Jetstream
+Laravel advises that Jetstream and its stacks (livewire or inertia) should be done on a fresh application because it will install a layout view, registration, and login views, as well as routes for all authentication end-points. A dashboard route will also be generated for post-login requests. So an application that has some of those, might throw some conflicts.
 
-## Security Vulnerabilities
+Step 5: Install livewire or inertia
+We need to install one of the stacks, either a livewire or an inertia stack, in this tutorial, I will only be using livewire because it set up everything I need for the app
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+php artisan jetstream:install livewire
 
-## License
+Installing Livewire
+As suggested, run npm install && npm run dev to build all the javaScript files and CSS we need for our app. On successful build, Laravel will send a notification at the bottom left.
+Laravel Notification
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Step 5: Migrate the new table that is created
+php artisan migrate
+
+migration Command
+Let’s run our app
+
+php artisan serve
+
+Running our app
+Holding down the Ctrl button and Clicking the localhost http://127.0.0.1:8000/ will serve our app in our default browser
